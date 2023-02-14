@@ -17,11 +17,24 @@ function activate(context) {
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with  registerCommand
 	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('copy-mate.helloWorld', function () {
-		// The code you place here will be executed every time your command is executed
+	let disposable = vscode.commands.registerCommand("copy-mate.transformText", async function () {
+		// Get the active text editor
+		let editor = vscode.window.activeTextEditor;
 
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from copy-mate!');
+		if (!editor) {
+			return;
+		}
+
+		// Get the selected text in the active editor
+		let selection = editor.selection;
+		let text = editor.document.getText(selection);
+
+		// Show an information message with the selected text
+		vscode.window.showInformationMessage(`Selected text: "${text}"`);
+
+		await vscode.env.clipboard.writeText("Hello World!");
+
+		vscode.window.showInformationMessage("Wrote hello world to Clipboard!");
 	});
 
 	context.subscriptions.push(disposable);
